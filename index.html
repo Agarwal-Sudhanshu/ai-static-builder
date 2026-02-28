@@ -3,69 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Theme Landing Page</title>
+    <title>Modern Fintech Landing Page</title>
     <style>
         body {
             margin: 0;
-            padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #121212;
+            background-color: #001f3f;
             color: #ffffff;
+            display: flex;
+            height: 100vh;
         }
-        header {
-            background: linear-gradient(90deg, #1E1E1E, #004CFF);
-            padding: 20px;
-            text-align: center;
+        .left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px;
         }
-        h1 {
-            margin: 0;
-            font-size: 40px;
-        }
-        p {
-            font-size: 18px;
-            margin: 10px 0;
+        .right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .cta-button {
-            background: #004CFF;
-            color: #ffffff;
+            background-color: #007bff;
+            color: white;
             padding: 15px 30px;
+            font-size: 18px;
             border: none;
             border-radius: 5px;
-            font-size: 18px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
         }
         .cta-button:hover {
-            background: #007BFF;
+            box-shadow: 0 0 25px rgba(0, 123, 255, 1);
         }
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #1E1E1E;
-            position: absolute;
-            bottom: 0;
+        .illustration-placeholder {
             width: 100%;
+            height: 100%;
+            background-color: #3a4750;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 24px;
+            border-radius: 10px;
+        }
+        @media (max-width: 768px) {
+            .left, .right {
+                flex: 100%;
+            }
         }
     </style>
 </head>
 <body>
-
-<header>
-    <h1>Welcome to Our Dark Themed Site</h1>
-    <p>Your gateway to a stylish experience.</p>
-    <button class="cta-button">Get Started</button>
-</header>
-
-<main>
-    <section>
-        <h2>Features</h2>
-        <p>Explore amazing features that make us stand out.</p>
-    </section>
-</main>
-
-<footer>
-    <p>&copy; 2023 Your Company. All rights reserved.</p>
-</footer>
-
+    <div class="left">
+        <h1>Welcome to Our Fintech Solutions</h1>
+        <p>Transform the way you manage your finances with our intuitive platform that offers seamless experiences and powerful tools.</p>
+        <button class="cta-button">Get Started</button>
+    </div>
+    <div class="right">
+        <div class="illustration-placeholder">Illustration Placeholder</div>
+    </div>
 </body>
 </html>

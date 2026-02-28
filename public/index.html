@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Site Generator</title>
+</head>
+<body>
+  <h2>AI Website Builder</h2>
+  <input id="prompt" style="width:400px;" placeholder="Enter prompt" />
+  <button onclick="generate()">Generate</button>
+
+  <script>
+    async function generate() {
+      const prompt = document.getElementById("prompt").value;
+
+      await fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
+
+      alert("Site Updated! Refresh GitHub Page in 30 seconds.");
+    }
+  </script>
+</body>
+</html>
