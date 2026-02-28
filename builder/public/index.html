@@ -12,9 +12,44 @@
   placeholder="Enter your prompt here..."
 ></textarea>
   <button onclick="generate()">Generate</button>
-<h3>Rollback</h3>
+<h3>Version Rollback</h3>
 <select id="versionList"></select>
-<button onclick="rollback()">Rollback</button>
+<button onclick="rollback()">Version Rollback</button>
+
+<h3>Git Rollback</h3>
+<select id="commitList"></select>
+<button onclick="gitRollback()">Git Rollback</button>
+
+<script>
+async function loadCommits() {
+  const res = await fetch("/commits");
+  const commits = await res.json();
+
+  const select = document.getElementById("commitList");
+  select.innerHTML = "";
+
+  commits.forEach(c => {
+    const option = document.createElement("option");
+    option.value = c.hash;
+    option.textContent = `${c.hash} - ${c.message} (${c.date})`;
+    select.appendChild(option);
+  });
+}
+
+async function gitRollback() {
+  const hash = document.getElementById("commitList").value;
+
+  await fetch("/git-rollback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ hash })
+  });
+
+  alert("Rollback complete. Refresh GitHub Pages.");
+}
+
+loadCommits();
+</script>
 
 <script>
 async function loadVersions() {

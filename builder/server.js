@@ -150,6 +150,40 @@ app.get("/versions", (req, res) => {
   res.json(versions);
 });
 
+app.get("/commits", (req, res) => {
+  try {
+    const log = execSync(
+      'git log --pretty=format:"%h|%s|%cd" --date=short -- docs',
+      { encoding: "utf-8" }
+    );
+
+    const commits = log.split("\n").map(line => {
+      const [hash, message, date] = line.split("|");
+      return { hash, message, date };
+    });
+
+    res.json(commits);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.post("/git-rollback", (req, res) => {
+  const { hash } = req.body;
+
+  try {
+    // Restore docs folder from selected commit
+    execSync(`git checkout ${hash} -- docs`);
+
+    execSync("git add .");
+    execSync(`git commit -m "Rollback to commit ${hash}"`);
+    execSync("git push");
+
+    res.json({ status: "Rollback successful" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server running at http://localhost:3000");
 });
