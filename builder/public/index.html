@@ -12,7 +12,40 @@
   placeholder="Enter your prompt here..."
 ></textarea>
   <button onclick="generate()">Generate</button>
+<h3>Rollback</h3>
+<select id="versionList"></select>
+<button onclick="rollback()">Rollback</button>
 
+<script>
+async function loadVersions() {
+  const res = await fetch("/versions");
+  const versions = await res.json();
+
+  const select = document.getElementById("versionList");
+  select.innerHTML = "";
+
+  versions.forEach(v => {
+    const option = document.createElement("option");
+    option.value = v;
+    option.textContent = v;
+    select.appendChild(option);
+  });
+}
+
+async function rollback() {
+  const version = document.getElementById("versionList").value;
+
+  await fetch("/rollback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ version })
+  });
+
+  alert("Rollback complete. Refresh live site.");
+}
+
+loadVersions();
+</script>
   <script>
   async function generate() {
     const prompt = document.getElementById("prompt").value.trim();

@@ -75,7 +75,20 @@ Rules:
 raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
 
 const parsed = JSON.parse(raw);
+// Snapshot current docs
+const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+const versionPath = `versions/${timestamp}`;
 
+if (!fs.existsSync("versions")) {
+  fs.mkdirSync("versions");
+}
+
+fs.mkdirSync(versionPath);
+
+// Copy current docs into version folder
+fs.readdirSync("docs").forEach(file => {
+  fs.copyFileSync(`docs/${file}`, `${versionPath}/${file}`);
+});
 // Clean old HTML files
 fs.readdirSync("docs").forEach(file => {
   if (file.endsWith(".html")) {
@@ -101,6 +114,40 @@ console.log("Multi-page site generated.");
     console.error(err);
     res.status(500).json({ error: err.message });
   }
+});
+
+app.post("/rollback", (req, res) => {
+  const version = req.body.version;
+
+  const versionPath = `versions/${version}`;
+
+  if (!fs.existsSync(versionPath)) {
+    return res.status(404).json({ error: "Version not found" });
+  }
+
+  // Clean current docs
+  fs.readdirSync("docs").forEach(file => {
+    fs.unlinkSync(`docs/${file}`);
+  });
+
+  // Restore selected version
+  fs.readdirSync(versionPath).forEach(file => {
+    fs.copyFileSync(`${versionPath}/${file}`, `docs/${file}`);
+  });
+
+  execSync("git add .");
+  execSync(`git commit -m "Rollback to ${version}"`);
+  execSync("git push");
+
+  res.json({ status: "Rollback successful" });
+});
+app.get("/versions", (req, res) => {
+  if (!fs.existsSync("versions")) {
+    return res.json([]);
+  }
+
+  const versions = fs.readdirSync("versions").sort().reverse();
+  res.json(versions);
 });
 
 app.listen(3000, () => {
