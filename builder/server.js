@@ -63,10 +63,16 @@ Rules:
   ],
     });
 
-    let htmlContent = response.choices[0].message.content;
-    htmlContent = htmlContent.replace(/```html/g, "").replace(/```/g, "");
+    let raw = response.choices[0].message.content;
 
-    fs.writeFileSync("docs/index.html", htmlContent.trim());
+// Remove accidental markdown if any
+raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+
+const parsed = JSON.parse(raw);
+
+fs.writeFileSync("docs/index.html", parsed.html);
+fs.writeFileSync("docs/style.css", parsed.css);
+console.log("Multi-file site generated.");
 
     execSync("git add .");
     execSync(`git commit -m "AI update: ${prompt}"`);
