@@ -76,6 +76,12 @@ raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
 
 const parsed = JSON.parse(raw);
 
+// Clean old HTML files
+fs.readdirSync("docs").forEach(file => {
+  if (file.endsWith(".html")) {
+    fs.unlinkSync(`docs/${file}`);
+  }
+});
 // Write pages
 parsed.pages.forEach(page => {
   fs.writeFileSync(`docs/${page.filename}`, page.content);
