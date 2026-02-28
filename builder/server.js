@@ -8,7 +8,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static("builder/public"));
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -36,7 +36,7 @@ app.post("/generate", async (req, res) => {
     let htmlContent = response.choices[0].message.content;
     htmlContent = htmlContent.replace(/```html/g, "").replace(/```/g, "");
 
-    fs.writeFileSync("index.html", htmlContent.trim());
+    fs.writeFileSync("site/index.html", htmlContent.trim());
 
     execSync("git add .");
     execSync(`git commit -m "AI update: ${prompt}"`);
