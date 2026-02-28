@@ -44,16 +44,24 @@ You are a professional frontend developer.
 Return ONLY valid JSON in this exact format:
 
 {
-  "html": "full HTML markup without <style> tag. Must link style.css properly.",
-  "css": "complete CSS styling"
+  "pages": [
+    { "filename": "index.html", "content": "full HTML content" },
+    { "filename": "about.html", "content": "full HTML content" },
+    { "filename": "services.html", "content": "full HTML content" },
+    { "filename": "pricing.html", "content": "full HTML content" },
+    { "filename": "contact.html", "content": "full HTML content" }
+  ],
+  "css": "complete shared CSS styling"
 }
 
 Rules:
 - No markdown
 - No explanation
 - No backticks
-- HTML must include: <link rel="stylesheet" href="style.css">
-- Start HTML with <!DOCTYPE html>
+- Each HTML must:
+  - Start with <!DOCTYPE html>
+  - Include: <link rel="stylesheet" href="style.css">
+  - Include navigation menu linking all pages
 `
     },
     {
@@ -64,15 +72,19 @@ Rules:
     });
 
     let raw = response.choices[0].message.content;
-
-// Remove accidental markdown if any
 raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
 
 const parsed = JSON.parse(raw);
 
-fs.writeFileSync("docs/index.html", parsed.html);
+// Write pages
+parsed.pages.forEach(page => {
+  fs.writeFileSync(`docs/${page.filename}`, page.content);
+});
+
+// Write shared CSS
 fs.writeFileSync("docs/style.css", parsed.css);
-console.log("Multi-file site generated.");
+
+console.log("Multi-page site generated.");
 
     execSync("git add .");
     execSync(`git commit -m "AI update: ${prompt}"`);
