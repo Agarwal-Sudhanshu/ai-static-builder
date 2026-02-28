@@ -3,69 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Fintech Landing Page</title>
+    <title>SaaS Landing Page</title>
     <style>
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #001f3f;
-            color: #ffffff;
-            display: flex;
-            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-        .left {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 50px;
-        }
-        .right {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .cta-button {
-            background-color: #007bff;
+        header {
+            background: #007bff;
             color: white;
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
+            padding: 40px 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .hero p {
+            font-size: 1.2em;
+        }
+        .features, .pricing, .testimonials, .faq {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .feature {
+            background: white;
+            padding: 20px;
             border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .pricing-table {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .pricing-tier {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .testimonial {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+        }
+        .accordion {
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+        }
+        .accordion-item {
+            margin: 10px 0;
+        }
+        .accordion-trigger {
+            background: #007bff;
+            color: white;
+            padding: 10px;
             cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
-        }
-        .cta-button:hover {
-            box-shadow: 0 0 25px rgba(0, 123, 255, 1);
-        }
-        .illustration-placeholder {
+            border: none;
             width: 100%;
-            height: 100%;
-            background-color: #3a4750;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 24px;
-            border-radius: 10px;
+            text-align: left;
         }
-        @media (max-width: 768px) {
-            .left, .right {
-                flex: 100%;
-            }
+        .accordion-content {
+            display: none;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        .accordion-item.active .accordion-content {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="left">
-        <h1>Welcome to Our Fintech Solutions</h1>
-        <p>Transform the way you manage your finances with our intuitive platform that offers seamless experiences and powerful tools.</p>
-        <button class="cta-button">Get Started</button>
+
+<header class="hero">
+    <h1>Transform Your Productivity</h1>
+    <p>Join us to optimize your workflow and increase efficiency</p>
+</header>
+
+<section class="features">
+    <h2>Features</h2>
+    <div class="features-grid">
+        <div class="feature">
+            <h3>Feature 1</h3>
+            <p>Short description of feature 1.</p>
+        </div>
+        <div class="feature">
+            <h3>Feature 2</h3>
+            <p>Short description of feature 2.</p>
+        </div>
+        <div class="feature">
+            <h3>Feature 3</h3>
+            <p>Short description of feature 3.</p>
+        </div>
+        <div class="feature">
+            <h3>Feature 4</h3>
+            <p>Short description of feature 4.</p>
+        </div>
+        <div class="feature">
+            <h3>Feature 5</h3>
+            <p>Short description of feature 5.</p>
+        </div>
+        <div class="feature">
+            <h3>Feature 6</h3>
+            <p>Short description of feature 6.</p>
+        </div>
     </div>
-    <div class="right">
-        <div class="illustration-placeholder">Illustration Placeholder</div>
+</section>
+
+<section class="pricing">
+    <h2>Pricing Plans</h2>
+    <div class="pricing-table">
+        <div class="pricing-tier">
+            <h3>Basic</h3>
+            <p>$10/month</p>
+            <button>Choose Plan</button>
+        </div>
+        <div class="pricing-tier">
+            <h3>Pro</h3>
+            <p>$30/month</p>
+            <button>Choose Plan</button>
+        </div>
+        <div class="pricing-tier">
+            <h3>Enterprise</h3>
+            <p>$60/month</p>
+            <button>Choose Plan</button>
+        </div>
     </div>
+</section>
+
+<section class="testimonials">
+    <h2>What Our Users Say</h2>
+    <div class="testimonial">
+        <p>"This software has changed the way we work!"</p>
+        <cite>- User 1</cite>
+    </div>
+    <div class="testimonial">
+        <p>"Excellent features and easy to use."</p>
+        <cite>- User 2</cite>
+    </div>
+    <div class="testimonial">
+        <p>"I can't imagine working without it."</p>
+        <cite>- User 3</cite>
+    </div>
+</section>
+
+<section class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="accordion">
+        <div class="accordion-item">
+            <button class="accordion-trigger">What is SaaS?</button>
+            <div class="accordion-content">SaaS stands for Software as a Service...</div>
+        </div>
+        <div class="accordion-item">
+            <button class="accordion-trigger">How do I cancel my subscription?</button>
+            <div class="accordion-content">You can cancel anytime in your account settings...</div>
+        </div>
+        <div class="accordion-item">
+            <button class="accordion-trigger">Is there a free trial?</button>
+            <div class="accordion-content">Yes, we offer a 14-day free trial for all new users...</div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const accordionTriggers = document.querySelectorAll('.accordion-trigger');
+    accordionTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const item = trigger.parentElement;
+            item.classList.toggle('active');
+        });
+    });
+</script>
+
 </body>
 </html>
