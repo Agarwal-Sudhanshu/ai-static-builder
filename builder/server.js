@@ -51,7 +51,9 @@ Return ONLY valid JSON in this exact format:
     { "filename": "pricing.html", "content": "full HTML content" },
     { "filename": "contact.html", "content": "full HTML content" }
   ],
-  "css": "complete shared CSS styling"
+  "css": "complete shared CSS styling",
+  "images": [
+    { "filename": "hero.png", "prompt": "image description" }
 }
 
 Rules:
@@ -76,12 +78,29 @@ raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
 
 const parsed = JSON.parse(raw);
 
+
+
 // Clean old HTML files
 fs.readdirSync("docs").forEach(file => {
   if (file.endsWith(".html")) {
     fs.unlinkSync(`docs/${file}`);
   }
 });
+if (!fs.existsSync("docs/assets")) {
+  fs.mkdirSync("docs/assets");
+}
+for (const img of parsed.images || []) {
+  const imageResponse = await client.images.generate({
+    model: "gpt-image-1",
+    prompt: img.prompt,
+    size: "1024x1024"
+  });
+
+  const imageBase64 = imageResponse.data[0].b64_json;
+  const imageBuffer = Buffer.from(imageBase64, "base64");
+
+  fs.writeFileSync(`docs/assets/${img.filename}`, imageBuffer);
+}
 // Write pages
 parsed.pages.forEach(page => {
   fs.writeFileSync(`docs/${page.filename}`, page.content);
