@@ -35,17 +35,32 @@ app.post("/generate", async (req, res) => {
   try {
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "Generate ONLY raw HTML. No explanations. Return complete HTML starting with <!DOCTYPE html>.",
-        },
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
+      messages:[
+    {
+      role: "system",
+      content: `
+You are a professional frontend developer.
+
+Return ONLY valid JSON in this exact format:
+
+{
+  "html": "full HTML markup without <style> tag. Must link style.css properly.",
+  "css": "complete CSS styling"
+}
+
+Rules:
+- No markdown
+- No explanation
+- No backticks
+- HTML must include: <link rel="stylesheet" href="style.css">
+- Start HTML with <!DOCTYPE html>
+`
+    },
+    {
+      role: "user",
+      content: prompt
+    }
+  ],
     });
 
     let htmlContent = response.choices[0].message.content;
