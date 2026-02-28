@@ -1,6 +1,7 @@
 import fs from "fs";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import { execSync } from "child_process";
 
 dotenv.config();
 
@@ -8,7 +9,7 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const prompt = process.argv[2];
+const prompt = process.argv.slice(2).join(" ");
 
 if (!prompt) {
   console.log("Please provide a prompt.");
@@ -21,7 +22,8 @@ async function generatePage() {
     messages: [
       {
         role: "system",
-        content: "You are a web developer. Generate a complete responsive HTML landing page with inline CSS.",
+        content:
+          "You are a web developer. Generate ONLY raw HTML. Do NOT include explanations. Return pure HTML starting with <!DOCTYPE html>.",
       },
       {
         role: "user",
@@ -30,11 +32,19 @@ async function generatePage() {
     ],
   });
 
-  const htmlContent = response.choices[0].message.content;
+  let htmlContent = response.choices[0].message.content;
+  htmlContent = htmlContent.replace(/```html/g, "").replace(/```/g, "");
 
-  fs.writeFileSync("index.html", htmlContent);
+  fs.writeFileSync("index.html", htmlContent.trim());
 
-  console.log("index.html generated successfully!");
+  console.log("HTML generated.");
+
+  // Auto Git Commit + Push
+  execSync("git add .");
+  execSync(`git commit -m "AI update: ${prompt}"`);
+  execSync("git push");
+
+  console.log("Changes pushed to GitHub.");
 }
 
 generatePage();
