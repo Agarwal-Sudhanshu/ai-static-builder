@@ -1,1 +1,12 @@
-body { background-color: black; color: white; font-family: 'Arial', sans-serif; } nav { background-color: #111; padding: 1rem; } nav ul { list-style: none; display: flex; justify-content: space-around; } nav a { color: neon green; text-decoration: none; font-weight: bold; } h1 { font-size: 2.5rem; } .gradient-button { background-image: linear-gradient(to right, neon green, #00ff99); color: black; border: none; padding: 10px 20px; cursor: pointer; } .animated-hero { animation: fadeIn 2s; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } footer { padding: 1rem; text-align: center; }
+body { background-color: #f9f9f9; color: #333; font-family: Arial, sans-serif; }
+nav { background-color: #001f3f; padding: 10px; }
+nav ul { list-style-type: none; padding: 0; }
+nav ul li { display: inline; margin-right: 15px; }
+nav a { color: white; text-decoration: none; }
+header { text-align: center; margin: 20px 0; }
+h1 { font-family: 'Times New Roman', serif; }
+.features, .mission, .service-list, .pricing-table, .contact-form { margin: 20px; padding: 20px; border-radius: 5px; background-color: #fff; }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+.footer { text-align: center; padding: 10px; }
+table { width: 100%; border-collapse: collapse; }
+table, th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
