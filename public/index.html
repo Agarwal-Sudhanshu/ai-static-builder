@@ -5,21 +5,31 @@
 </head>
 <body>
   <h2>AI Website Builder</h2>
-  <input id="prompt" style="width:400px;" placeholder="Enter prompt" />
+  <textarea 
+  id="prompt" 
+  rows="6" 
+  style="width:600px; padding:10px; font-size:14px;"
+  placeholder="Enter your prompt here..."
+></textarea>
   <button onclick="generate()">Generate</button>
 
   <script>
-    async function generate() {
-      const prompt = document.getElementById("prompt").value;
+  async function generate() {
+    const prompt = document.getElementById("prompt").value.trim();
 
-      await fetch("/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
-      });
-
-      alert("Site Updated! Refresh GitHub Page in 30 seconds.");
+    if (!prompt) {
+      alert("Please enter a prompt.");
+      return;
     }
-  </script>
+
+    await fetch("/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+
+    alert("Site Updated! Refresh GitHub Page in 30 seconds.");
+  }
+</script>
 </body>
 </html>
