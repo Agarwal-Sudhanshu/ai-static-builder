@@ -75,20 +75,7 @@ Rules:
 raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
 
 const parsed = JSON.parse(raw);
-// Snapshot current docs
-const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-const versionPath = `versions/${timestamp}`;
 
-if (!fs.existsSync("versions")) {
-  fs.mkdirSync("versions");
-}
-
-fs.mkdirSync(versionPath);
-
-// Copy current docs into version folder
-fs.readdirSync("docs").forEach(file => {
-  fs.copyFileSync(`docs/${file}`, `${versionPath}/${file}`);
-});
 // Clean old HTML files
 fs.readdirSync("docs").forEach(file => {
   if (file.endsWith(".html")) {
@@ -140,14 +127,6 @@ app.post("/rollback", (req, res) => {
   execSync("git push");
 
   res.json({ status: "Rollback successful" });
-});
-app.get("/versions", (req, res) => {
-  if (!fs.existsSync("versions")) {
-    return res.json([]);
-  }
-
-  const versions = fs.readdirSync("versions").sort().reverse();
-  res.json(versions);
 });
 
 app.get("/commits", (req, res) => {

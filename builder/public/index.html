@@ -12,13 +12,11 @@
   placeholder="Enter your prompt here..."
 ></textarea>
   <button onclick="generate()">Generate</button>
-<h3>Version Rollback</h3>
-<select id="versionList"></select>
-<button onclick="rollback()">Version Rollback</button>
+
 
 <h3>Git Rollback</h3>
 <select id="commitList"></select>
-<button onclick="gitRollback()">Git Rollback</button>
+<button onclick="gitRollback()">Rollback</button>
 
 <script>
 async function loadCommits() {
