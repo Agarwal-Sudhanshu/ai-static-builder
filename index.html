@@ -3,192 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaaS Landing Page</title>
+    <title>Premium BFSI AI Product</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background: linear-gradient(180deg, #f4f4f4, #eaeaea);
+            color: #333;
         }
         header {
-            background: #007bff;
-            color: white;
-            padding: 40px 0;
+            background: linear-gradient(90deg, #005f73, #0a9396);
+            color: #fff;
+            padding: 20px 0;
             text-align: center;
         }
-        .hero h1 {
-            font-size: 2.5em;
+        h1 {
             margin: 0;
+            font-size: 36px;
+            font-weight: 700;
         }
-        .hero p {
-            font-size: 1.2em;
+        p {
+            font-size: 18px;
+            margin: 10px 0;
         }
-        .features, .pricing, .testimonials, .faq {
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: auto;
+        .cta-button {
+            background: #ee9b00;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
         }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .cta-button:hover {
+            background: #ca6702;
+        }
+        section {
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .features {
+            display: flex;
+            justify-content: center;
             gap: 20px;
+            flex-wrap: wrap;
         }
         .feature {
             background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 300px;
+        }
+        footer {
+            background: #005f73;
+            color: #fff;
+            padding: 20px 0;
             text-align: center;
-        }
-        .pricing-table {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        .pricing-tier {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .testimonial {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin: 10px 0;
-        }
-        .accordion {
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin: 10px 0;
-        }
-        .accordion-item {
-            margin: 10px 0;
-        }
-        .accordion-trigger {
-            background: #007bff;
-            color: white;
-            padding: 10px;
-            cursor: pointer;
-            border: none;
-            width: 100%;
-            text-align: left;
-        }
-        .accordion-content {
-            display: none;
-            padding: 10px;
-            background: #f9f9f9;
-        }
-        .accordion-item.active .accordion-content {
-            display: block;
         }
     </style>
 </head>
 <body>
 
-<header class="hero">
-    <h1>Transform Your Productivity</h1>
-    <p>Join us to optimize your workflow and increase efficiency</p>
+<header>
+    <h1>Transforming BFSI with AI</h1>
+    <p>Unlock the potential of your financial services with cutting-edge AI solutions.</p>
+    <a href="#contact" class="cta-button">Get Started</a>
 </header>
 
-<section class="features">
-    <h2>Features</h2>
-    <div class="features-grid">
+<section>
+    <h2>Key Features</h2>
+    <div class="features">
         <div class="feature">
-            <h3>Feature 1</h3>
-            <p>Short description of feature 1.</p>
+            <h3>Risk Management</h3>
+            <p>Advanced algorithms to assess and mitigate risks effectively.</p>
         </div>
         <div class="feature">
-            <h3>Feature 2</h3>
-            <p>Short description of feature 2.</p>
+            <h3>Fraud Detection</h3>
+            <p>Real-time monitoring for fraudulent activity using AI.</p>
         </div>
         <div class="feature">
-            <h3>Feature 3</h3>
-            <p>Short description of feature 3.</p>
-        </div>
-        <div class="feature">
-            <h3>Feature 4</h3>
-            <p>Short description of feature 4.</p>
-        </div>
-        <div class="feature">
-            <h3>Feature 5</h3>
-            <p>Short description of feature 5.</p>
-        </div>
-        <div class="feature">
-            <h3>Feature 6</h3>
-            <p>Short description of feature 6.</p>
+            <h3>Customer Insights</h3>
+            <p>Leverage data analytics to understand customer behavior.</p>
         </div>
     </div>
+    <a href="#contact" class="cta-button">Contact Us</a>
 </section>
 
-<section class="pricing">
-    <h2>Pricing Plans</h2>
-    <div class="pricing-table">
-        <div class="pricing-tier">
-            <h3>Basic</h3>
-            <p>$10/month</p>
-            <button>Choose Plan</button>
-        </div>
-        <div class="pricing-tier">
-            <h3>Pro</h3>
-            <p>$30/month</p>
-            <button>Choose Plan</button>
-        </div>
-        <div class="pricing-tier">
-            <h3>Enterprise</h3>
-            <p>$60/month</p>
-            <button>Choose Plan</button>
-        </div>
-    </div>
-</section>
-
-<section class="testimonials">
-    <h2>What Our Users Say</h2>
-    <div class="testimonial">
-        <p>"This software has changed the way we work!"</p>
-        <cite>- User 1</cite>
-    </div>
-    <div class="testimonial">
-        <p>"Excellent features and easy to use."</p>
-        <cite>- User 2</cite>
-    </div>
-    <div class="testimonial">
-        <p>"I can't imagine working without it."</p>
-        <cite>- User 3</cite>
-    </div>
-</section>
-
-<section class="faq">
-    <h2>Frequently Asked Questions</h2>
-    <div class="accordion">
-        <div class="accordion-item">
-            <button class="accordion-trigger">What is SaaS?</button>
-            <div class="accordion-content">SaaS stands for Software as a Service...</div>
-        </div>
-        <div class="accordion-item">
-            <button class="accordion-trigger">How do I cancel my subscription?</button>
-            <div class="accordion-content">You can cancel anytime in your account settings...</div>
-        </div>
-        <div class="accordion-item">
-            <button class="accordion-trigger">Is there a free trial?</button>
-            <div class="accordion-content">Yes, we offer a 14-day free trial for all new users...</div>
-        </div>
-    </div>
-</section>
-
-<script>
-    const accordionTriggers = document.querySelectorAll('.accordion-trigger');
-    accordionTriggers.forEach(trigger => {
-        trigger.addEventListener('click', () => {
-            const item = trigger.parentElement;
-            item.classList.toggle('active');
-        });
-    });
-</script>
+<footer>
+    <p>&copy; 2023 Your Company. All Rights Reserved.</p>
+</footer>
 
 </body>
 </html>
