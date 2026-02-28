@@ -3,12 +3,27 @@ import fs from "fs";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import { execSync } from "child_process";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 app.use(express.json());
-app.use(express.static("builder/public"));
+
+// FORCE absolute static path
+const staticPath = path.join(__dirname, "public");
+console.log("Serving static from:", staticPath);
+
+app.use(express.static(staticPath));
+
+// Explicit root route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(staticPath, "index.html"));
+});
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -24,7 +39,7 @@ app.post("/generate", async (req, res) => {
         {
           role: "system",
           content:
-            "Generate ONLY raw HTML and separate CSS inside <style> tags. No explanation.",
+            "Generate ONLY raw HTML. No explanations. Return complete HTML starting with <!DOCTYPE html>.",
         },
         {
           role: "user",
@@ -44,6 +59,7 @@ app.post("/generate", async (req, res) => {
 
     res.json({ status: "Success" });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
