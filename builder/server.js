@@ -14,13 +14,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.json());
 
-// FORCE absolute static path
+// Serve builder UI
 const staticPath = path.join(__dirname, "public");
-console.log("Serving static from:", staticPath);
-
 app.use(express.static(staticPath));
 
-// Explicit root route
 app.get("/", (req, res) => {
   res.sendFile(path.join(staticPath, "index.html"));
 });
@@ -29,129 +26,144 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// ============================
+// GENERATE ROUTE
+// ============================
+
 app.post("/generate", async (req, res) => {
   const prompt = req.body.prompt;
 
   try {
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
-      messages:[
-    {
-      role: "system",
-      content: `
+      messages: [
+        {
+          role: "system",
+          content: `
 You are a professional frontend developer.
 
-Return ONLY valid JSON in this exact format:
+Return ONLY valid JSON in this format:
 
 {
   "pages": [
     { "filename": "index.html", "content": "full HTML content" },
     { "filename": "about.html", "content": "full HTML content" },
-    { "filename": "services.html", "content": "full HTML content" },
+    { "filename": "features.html", "content": "full HTML content" },
     { "filename": "pricing.html", "content": "full HTML content" },
     { "filename": "contact.html", "content": "full HTML content" }
   ],
   "css": "complete shared CSS styling",
   "images": [
-    { "filename": "hero.png", "prompt": "image description" }
+    { "filename": "logo.png", "prompt": "image description" }
+  ]
 }
 
 Rules:
-- All images MUST be referenced exactly like: <img src="assets/<filename>">
+- All images MUST use: <img src="assets/<filename>">
+- Never use leading slash in image path
 - No markdown
 - No explanation
-- No backticks
 - Each HTML must:
   - Start with <!DOCTYPE html>
   - Include: <link rel="stylesheet" href="style.css">
-  - Include navigation menu linking all pages
 `
-    },
-    {
-      role: "user",
-      content: prompt
-    }
-  ],
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ]
     });
 
     let raw = response.choices[0].message.content;
-raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+    raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
 
-const parsed = JSON.parse(raw);
+    const parsed = JSON.parse(raw);
 
+    // Ensure docs folder exists
+    if (!fs.existsSync("docs")) {
+      fs.mkdirSync("docs");
+    }
 
+    // Remove old HTML files
+    fs.readdirSync("docs").forEach(file => {
+      if (file.endsWith(".html")) {
+        fs.unlinkSync(`docs/${file}`);
+      }
+    });
 
-// Clean old HTML files
-fs.readdirSync("docs").forEach(file => {
-  if (file.endsWith(".html")) {
-    fs.unlinkSync(`docs/${file}`);
-  }
-});
-if (!fs.existsSync("docs/assets")) {
-  fs.mkdirSync("docs/assets");
-}
-for (const img of parsed.images || []) {
-  const imageResponse = await client.images.generate({
-    model: "gpt-image-1",
-    prompt: img.prompt,
-    size: "1024x1024"
-  });
+    // Ensure assets folder exists
+    if (!fs.existsSync("docs/assets")) {
+      fs.mkdirSync("docs/assets", { recursive: true });
+    }
 
-  const imageBase64 = imageResponse.data[0].b64_json;
-  const imageBuffer = Buffer.from(imageBase64, "base64");
+    // ===== Image Generation =====
+    const MAX_IMAGES = 5;
+    const imagesToGenerate = (parsed.images || []).slice(0, MAX_IMAGES);
 
-  fs.writeFileSync(`docs/assets/${img.filename}`, imageBuffer);
-}
-// Write pages
-parsed.pages.forEach(page => {
-  page.content = page.content.replace(
-  /src="\/(.*?)"/g,
-  'src="assets/$1"'
-);
-  fs.writeFileSync(`docs/${page.filename}`, page.content);
-});
+    for (const img of imagesToGenerate) {
+      const filePath = `docs/assets/${img.filename}`;
 
-// Write shared CSS
-fs.writeFileSync("docs/style.css", parsed.css);
+      if (!fs.existsSync(filePath)) {
+        const imageResponse = await client.images.generate({
+          model: "gpt-image-1",
+          prompt: img.prompt,
+          size: "1024x1024"
+        });
 
-console.log("Multi-page site generated.");
+        const imageBase64 = imageResponse.data[0].b64_json;
+        const imageBuffer = Buffer.from(imageBase64, "base64");
 
-    execSync("git add .");
-    execSync(`git commit -m "AI update: ${prompt}"`);
-    execSync("git push");
+        fs.writeFileSync(filePath, imageBuffer);
+      }
+    }
 
-    res.json({ status: "Success" });
+    // ===== Write Pages =====
+    parsed.pages.forEach(page => {
+      let content = page.content;
+
+      // Fix accidental leading slash
+      content = content.replace(
+        /src="\/(.*?)"/g,
+        'src="assets/$1"'
+      );
+
+      fs.writeFileSync(`docs/${page.filename}`, content);
+    });
+
+    // Write CSS
+    fs.writeFileSync("docs/style.css", parsed.css);
+
+    console.log("Site generated successfully.");
+
+    // ===== Safe Commit Message =====
+    const shortPrompt = prompt
+      .replace(/["'`]/g, "")
+      .replace(/\n/g, " ")
+      .substring(0, 60)
+      .trim();
+
+    const commitMessage = `AI: ${shortPrompt}`;
+
+    try {
+      execSync("git add .", { stdio: "inherit" });
+      execSync(`git commit -m "${commitMessage}"`, { stdio: "inherit" });
+      execSync("git push", { stdio: "inherit" });
+    } catch (gitErr) {
+      console.error("Git error:", gitErr.message);
+    }
+
+    res.json({ status: "Generation successful" });
+
   } catch (err) {
-    console.error(err);
+    console.error("Generation error:", err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
-app.post("/rollback", (req, res) => {
-  const version = req.body.version;
-
-  const versionPath = `versions/${version}`;
-
-  if (!fs.existsSync(versionPath)) {
-    return res.status(404).json({ error: "Version not found" });
-  }
-
-  // Clean current docs
-  fs.readdirSync("docs").forEach(file => {
-    fs.unlinkSync(`docs/${file}`);
-  });
-
-  // Restore selected version
-  fs.readdirSync(versionPath).forEach(file => {
-    fs.copyFileSync(`${versionPath}/${file}`, `docs/${file}`);
-  });
-
-  execSync("git add .");
-  execSync(`git commit -m "Rollback to ${version}"`);
-  execSync("git push");
-
-  res.json({ status: "Rollback successful" });
-});
+// ============================
+// Git Commit History
+// ============================
 
 app.get("/commits", (req, res) => {
   try {
@@ -166,22 +178,27 @@ app.get("/commits", (req, res) => {
     });
 
     res.json(commits);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+// ============================
+// Git Rollback
+// ============================
+
 app.post("/git-rollback", (req, res) => {
   const { hash } = req.body;
 
   try {
-    // Restore docs folder from selected commit
     execSync(`git checkout ${hash} -- docs`);
-
     execSync("git add .");
     execSync(`git commit -m "Rollback to commit ${hash}"`);
     execSync("git push");
 
     res.json({ status: "Rollback successful" });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
