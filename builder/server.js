@@ -57,6 +57,7 @@ Return ONLY valid JSON in this exact format:
 }
 
 Rules:
+- All images MUST be referenced exactly like: <img src="assets/<filename>">
 - No markdown
 - No explanation
 - No backticks
@@ -103,6 +104,10 @@ for (const img of parsed.images || []) {
 }
 // Write pages
 parsed.pages.forEach(page => {
+  page.content = page.content.replace(
+  /src="\/(.*?)"/g,
+  'src="assets/$1"'
+);
   fs.writeFileSync(`docs/${page.filename}`, page.content);
 });
 
