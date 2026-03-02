@@ -1,1 +1,10 @@
-body { background-color: white; color: #333; font-family: 'Arial', sans-serif; } header, footer { background-color: #2D9CDB; color: white; padding: 10px; } nav ul { list-style-type: none; padding: 0; } nav ul li { display: inline; margin-right: 15px; } button { background-color: #2D9CDB; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; } button:hover { background-color: #1A74B8; } .hero { text-align: center; padding: 50px; } .features, .comparison { margin: 20px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #e0e0e0; padding: 10px; text-align: left; } @media (max-width: 600px) { nav ul li { display: block; margin: 5px 0; } }
+body { background-color: #121212; color: #ffffff; font-family: Arial, sans-serif; }
+nav { background-color: #1e1e1e; padding: 15px; }
+ul { list-style-type: none; margin: 0; padding: 0; }
+li { display: inline; margin-right: 20px; }
+a { color: #0af; text-decoration: none; }
+a:hover { text-decoration: underline; }
+#hero { text-align: center; padding: 50px; }
+#hero img { width: 100%; max-width: 600px; }
+h1 { font-size: 2.5em; }
+footer { text-align: center; padding: 20px; background-color: #1e1e1e; }
